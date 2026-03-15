@@ -2,8 +2,6 @@ name: Project
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 jobs:
   start-application:
@@ -22,9 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
         
+      - name: Deploy Preview with Localtonet
+        uses: actions-hub/localtonet@main
+        with:
+          port: 5000
+          token: ${{ secrets.LOCALTONET_TOKEN }}
+          
       - name: Start application
         run: node server.js
-        
-    # Note: GitHub Actions doesn't have direct port forwarding like Nitric
-    # The application will run but won't be publicly accessible via port 80
-    # For web applications, you might want to add deployment steps
